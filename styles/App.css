@@ -1,12 +1,18 @@
 body {
     font-family: Helvetica, Sans-serif;
-    margin: 50px;
+    margin: 20px;
     padding: 0;
-    background-color: #fdc4ff;
+    background-color: #2d1a1a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
 }
 
 h1, h2, h3 {
-    color: #3b1873;
+    color: #161d5a;
 }
 
 
