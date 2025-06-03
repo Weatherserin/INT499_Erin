@@ -3,33 +3,83 @@ import React, { useState } from 'react';
 const StreamList = () => {
     const [inputValue, setInputValue] = useState('');
     const [entries, setEntries] = useState([]);
-
-    function handleInputChange(event) {
-        setInputValue(event.target.value);
-    }
+    const [editIndex, setEditIndex] = useState(null);
+    const [editValue, setEditValue] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (inputValue.trim() !== '') {
-            setEntries([...entries, inputValue]);
+            setEntries([...entries, { text: inputValue, completed: false }]);
             setInputValue('');
         }
     };
 
+    const handleDelete = (index) => {
+        setEntries(entries.filter((_, i) => i !== index));
+    };
+
+    const handleEdit = (index) => {
+        setEditIndex(index);
+        setEditValue(entries[index].text);
+    };
+
+    const handleEditChange = (event) => {
+        setEditValue(event.target.value);
+    };
+
+    const handleEditSubmit = (index) => {
+        const updatedEntries = entries.map((entry, i) =>
+            i === index ? { ...entry, text: editValue } : entry
+        );
+        setEntries(updatedEntries);
+        setEditIndex(null);
+        setEditValue('');
+    };
+
+    const handleComplete = (index) => {
+        const updatedEntries = entries.map((entry, i) =>
+            i === index ? { ...entry, completed: !entry.completed } : entry
+        );
+        setEntries(updatedEntries);
+    };
+
     return (
-        <div>
+        <div className="streamlist-container">
             <h1>Stream List</h1>
-            <form onSubmit={handleSubmit}>
+            <form className="streamlist-form" onSubmit={handleSubmit}>
                 <input 
                     type="text" 
                     value={inputValue} 
-                    onChange={handleInputChange} 
+                    onChange={e => setInputValue(e.target.value)} 
+                    placeholder="Add a new Movie"
+                    
                 />
                 <button type="submit">Submit</button>
             </form>
-            <ul>
+            <ul className="streamlist-list">
                 {entries.map((entry, index) => (
-                    <li key={index}>{entry}</li>
+                    <li key={index} style={{ textDecoration: entry.completed ? 'line-through' : 'none' }}>
+                        {editIndex === index ? (
+                            <>
+                                <input 
+                                    type="text" 
+                                    value={editValue} 
+                                    onChange={handleEditChange}
+                                />
+                                <button onClick={() => handleEditSubmit(index)}>Save</button>
+                                <button onClick={() => setEditIndex(null)}>Cancel</button>
+                            </>
+                        ) : (
+                            <>
+                                <span>{entry.text}</span>
+                                <button onClick={() => handleEdit(index)}>Edit</button>
+                                <button onClick={() => handleDelete(index)}>Delete</button>
+                                <button onClick={() => handleComplete(index)}>
+                                    {entry.completed ? 'Undo' : 'Complete'}
+                                </button>
+                            </>
+                        )}
+                    </li>
                 ))}
             </ul>
         </div>
