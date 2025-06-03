@@ -1,0 +1,106 @@
+.streamlist-container {
+  max-width: 500px;
+  margin: 0;
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.streamlist-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.streamlist-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+  max-width: 400px;
+}
+
+.streamlist-form input[type="text"] {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+  max-width: 220px;
+  min-width: 220;
+}
+
+.streamlist-form button {
+  padding: 0.5rem 1rem;
+  background: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.streamlist-form button:hover {
+  background: #388e3c;
+}
+
+.streamlist-list {
+  list-style: none;
+  padding: 0;
+  max-width: 400px;
+}
+
+.streamlist-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.streamlist-list li span {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.streamlist-list li input[type="text"] {
+  flex: 1;
+  padding: 0.3rem;
+  border-radius: 4px;
+  border: 3px solid #bbb;
+}
+
+.streamlist-list li button {
+  background: #eee;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.7rem;
+  margin-left: 0.2rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.streamlist-list li button:hover {
+  background: #bdbdbd;
+}
+
+.streamlist-list li button:last-child {
+  background: #4caf50;
+  color: #fff;
+}
+
+.streamlist-list li button:last-child:hover {
+  background: #388e3c;
+}
+
+.streamlist-list li[style*="line-through"] span {
+  color: #888;
+  font-style: italic;
+}
