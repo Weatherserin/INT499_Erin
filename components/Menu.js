@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/App.css'; 
+import '../styles/navbar.css';
 
 const Menu = () => {
     return (
-        <nav>
-            <ul>
-                <li>
-                    <Link to="/StreamList">StreamList</Link>
+        <nav className="navbar">
+            <ul className="navbar-list">
+                 <li>
+                     <Link to="/streamlist">StreamList</Link>
                 </li>
-                <li>
+                 <li>
                     <Link to="/movies">Movies</Link>
                 </li>
                 <li>
