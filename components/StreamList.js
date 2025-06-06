@@ -1,10 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+const LOCAL_STORAGE_KEY = 'streamlist_entries';
 
 const StreamList = () => {
     const [inputValue, setInputValue] = useState('');
     const [entries, setEntries] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
     const [editValue, setEditValue] = useState('');
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (stored) {
+            setEntries(JSON.parse(stored));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(entries));
+    }, [entries]);
+    
+    useEffect(() => {
+        fetch('https://api.themoviedb.org/3/movie/popular?api_key=267bef6c974e61e80475763ff92c845c')
+            .then(res => res.json())
+            .then(data => setMovies(data.results || []));
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -81,6 +101,20 @@ const StreamList = () => {
                         )}
                     </li>
                 ))}
+            </ul>
+            <h2>Popular Movies</h2>
+            <ul>
+            {movies.map(movie => (
+                <li key={movie.id}>
+                <strong>{movie.title}</strong>
+                <br />
+                <img
+                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                    alt={movie.title}
+                    style={{ borderRadius: '8px', marginTop: '0.5rem' }}
+                />
+                </li>
+            ))}
             </ul>
         </div>
     );
