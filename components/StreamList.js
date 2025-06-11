@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const LOCAL_STORAGE_KEY = 'streamlist_entries';
 
@@ -7,7 +7,6 @@ const StreamList = () => {
     const [entries, setEntries] = useState([]);
     const [editIndex, setEditIndex] = useState(null);
     const [editValue, setEditValue] = useState('');
-    const [movies, setMovies] = useState([]);
 
     useEffect(() => {
         const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -19,12 +18,6 @@ const StreamList = () => {
     useEffect(() => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(entries));
     }, [entries]);
-    
-    useEffect(() => {
-        fetch('https://api.themoviedb.org/3/movie/popular?api_key=267bef6c974e61e80475763ff92c845c')
-            .then(res => res.json())
-            .then(data => setMovies(data.results || []));
-    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -36,6 +29,10 @@ const StreamList = () => {
 
     const handleDelete = (index) => {
         setEntries(entries.filter((_, i) => i !== index));
+        if (editIndex === index) {
+            setEditIndex(null);
+            setEditValue('');
+        }
     };
 
     const handleEdit = (index) => {
@@ -65,6 +62,7 @@ const StreamList = () => {
 
     return (
         <div className="streamlist-container">
+            
             <h1>Stream List</h1>
             <form className="streamlist-form" onSubmit={handleSubmit}>
                 <input 
@@ -72,12 +70,14 @@ const StreamList = () => {
                     value={inputValue} 
                     onChange={e => setInputValue(e.target.value)} 
                     placeholder="Add a new Movie"
-                    
                 />
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={inputValue.trim() === ''}>Submit</button>
             </form>
             <ul className="streamlist-list">
-                {entries.map((entry, index) => (
+                {entries.length === 0 ? (
+                    <li>No entries yet.</li>
+            ) : (
+                 entries.map((entry, index) => (
                     <li key={index} style={{ textDecoration: entry.completed ? 'line-through' : 'none' }}>
                         {editIndex === index ? (
                             <>
@@ -85,6 +85,7 @@ const StreamList = () => {
                                     type="text" 
                                     value={editValue} 
                                     onChange={handleEditChange}
+                                    autoFocus
                                 />
                                 <button onClick={() => handleEditSubmit(index)}>Save</button>
                                 <button onClick={() => setEditIndex(null)}>Cancel</button>
@@ -100,21 +101,8 @@ const StreamList = () => {
                             </>
                         )}
                     </li>
-                ))}
-            </ul>
-            <h2>Popular Movies</h2>
-            <ul>
-            {movies.map(movie => (
-                <li key={movie.id}>
-                <strong>{movie.title}</strong>
-                <br />
-                <img
-                    src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                    alt={movie.title}
-                    style={{ borderRadius: '8px', marginTop: '0.5rem' }}
-                />
-                </li>
-            ))}
+                ))
+            )}
             </ul>
         </div>
     );
